@@ -14,18 +14,18 @@ async def strtCap(bot, message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("➕️ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ ➕️", url=f"https://t.me/CustomCaptionBot?startchannel=true")
+                InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
             ],[
-                InlineKeyboardButton("Hᴇʟᴘ", callback_data="help"),
-                InlineKeyboardButton("Aʙᴏᴜᴛ", callback_data="about")
+                InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
+                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeFlixsupport")
             ],[
-                InlineKeyboardButton("🌐 Uᴘᴅᴀᴛᴇ", url=f"https://t.me/Silicon_Bot_Update"),
-                InlineKeyboardButton("📜 Sᴜᴘᴘᴏʀᴛ", url=r"https://t.me/Silicon_Botz")
+                InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
         ]]
     )
     await message.reply_photo(
         photo=SILICON_PIC,
-        caption=f"<b>Hᴇʟʟᴏ {message.from_user.mention}\n\nɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ.\n\nFᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ᴄʟɪᴄᴋ ᴏɴ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ.\n\nMᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ »<a href='https://t.me/Silicon_Bot_Update'>Sɪʟɪᴄᴏɴ Bᴏᴛᴢ</a></b>",
+        caption=f"<b>Hᴇʟʟᴏ {message.from_user.mention}\n\nɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ.\n\nFᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ᴄʟɪᴄᴋ ᴏɴ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ.\n\nMᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ »<a href='https://t.me/CodeFlix_Bots'>ᴄᴏᴅᴇғʟɪx</a></b>",
         reply_markup=keyboard
     )
 
@@ -69,9 +69,9 @@ async def broadcast(bot, message):
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command("restart"))
 async def restart_bot(b, m):
-    silicon = await b.send_message(text="**🔄 𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...**", chat_id=m.chat.id)       
+    silicon = await b.send_message(text="**𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...**", chat_id=m.chat.id)       
     await asyncio.sleep(3)
-    await silicon.edit("**✅️ 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴**")
+    await silicon.edit("**𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴**")
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 @Client.on_message(filters.command("set_cap") & filters.channel)
@@ -160,16 +160,17 @@ def get_size(size):
 async def start(bot, query):
     await query.message.edit_text(
         text=script.START_TXT.format(query.from_user.mention),  
-        reply_markup=InlineKeyboardMarkup(
-            [[
-                InlineKeyboardButton("➕️ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ ➕️", url=f"http://t.me/CustomCaptionBot?startchannel=true")
-                ],[
-                InlineKeyboardButton("Hᴇʟᴘ", callback_data="help"),
-                InlineKeyboardButton("Aʙᴏᴜᴛ", callback_data="about")
+        keyboard = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
             ],[
-                InlineKeyboardButton("🌐 Uᴘᴅᴀᴛᴇ", url=f"https://t.me/Silicon_Bot_Update"),
-                InlineKeyboardButton("📜 Sᴜᴘᴘᴏʀᴛ", url=r"https://t.me/Silicon_Botz")
-            ]]
+                InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
+                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeFlixsupport")
+            ],[
+                InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
+        ]]
         ),
         disable_web_page_preview=True
 )
@@ -180,9 +181,9 @@ async def help(bot, query):
         text=script.HELP_TXT,
         reply_markup=InlineKeyboardMarkup(
             [[
-            InlineKeyboardButton('About', callback_data='about')
+            InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
             ],[
-            InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='start')
+            InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
             ]]
         ),
         disable_web_page_preview=True    
@@ -195,9 +196,9 @@ async def about(bot, query):
         text=script.ABOUT_TXT,
         reply_markup=InlineKeyboardMarkup(
             [[
-            InlineKeyboardButton('ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ❓', callback_data='help')
+            InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
             ],[
-            InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='start')
+            InlineKeyboardButton("• ʙᴀᴄᴋ •', callback_data='start')
             ]]
         ),
         disable_web_page_preview=True 
