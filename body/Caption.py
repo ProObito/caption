@@ -198,7 +198,7 @@ async def about(bot, query):
             [[
             InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
             ],[
-            InlineKeyboardButton("• ʙᴀᴄᴋ •', callback_data='start')
+            InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
             ]]
         ),
         disable_web_page_preview=True 
