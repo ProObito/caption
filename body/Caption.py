@@ -1,6 +1,6 @@
-from pyrofork import Client, filters
-from pyrofork.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pyrofork.errors import FloodWait
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.errors import FloodWait
 from info import *
 import asyncio
 from Script import script
@@ -99,7 +99,7 @@ async def broadcast(bot, message):
             except FloodWait as e:
                 await asyncio.sleep(e.x)
         await silicon.edit(
-            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʜ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
+            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
             parse_mode="html"
         )
 
@@ -302,4 +302,4 @@ async def about(bot, query):
             ]
         ),
         parse_mode="html"
-        )
+    )
