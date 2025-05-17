@@ -1,4 +1,4 @@
-from pyrogram import Client, filters
+from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 from info import *
@@ -20,19 +20,19 @@ def format_caption(text: str, font_style: str) -> tuple[str, str]:
     """
     text = html.escape(text)  # Escape HTML special characters
     if font_style == "BOLD":
-        return f"<b>{text}</b>", "html"
+        return f"<b>{text}</b>", enums.ParseMode.HTML
     elif font_style == "ITALIC":
-        return f"<i>{text}</i>", "html"
+        return f"<i>{text}</i>", enums.ParseMode.HTML
     elif font_style == "UNDERLINE":
-        return f"<u>{text}</u>", "html"
+        return f"<u>{text}</u>", enums.ParseMode.HTML
     elif font_style == "STRIKETHROUGH":
-        return f"<s>{text}</s>", "html"
+        return f"<s>{text}</s>", enums.ParseMode.HTML
     elif font_style == "MONOSPACE":
-        return f"<code>{text}</code>", "html"
+        return f"<code>{text}</code>", enums.ParseMode.HTML
     elif font_style == "SPOILER":
-        return f"<spoiler>{text}</spoiler>", "html"
+        return f"<spoiler>{text}</spoiler>", enums.ParseMode.HTML
     elif font_style == "BLOCKQUOTE":
-        return f"<blockquote>{text}</blockquote>", "html"
+        return f"<blockquote>{text}</blockquote>", enums.ParseMode.HTML
     else:  # NONE or invalid
         return text, None
 
@@ -55,27 +55,27 @@ async def strtCap(bot, message):
     await message.reply_photo(
         photo=SILICON_PIC,
         caption=f"<blockquote>{html.escape(script.START_TXT.format(message.from_user.mention))}</blockquote>",
-        parse_mode="html",
+        parse_mode=enums.ParseMode.HTML,
         reply_markup=keyboard
     )
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["total_users"]))
 async def all_db_users_here(client, message):
-    silicon = await message.reply_text("<blockquote>Please Wait....</blockquote>", parse_mode="html")
+    silicon = await message.reply_text("<blockquote>Please Wait....</blockquote>", parse_mode=enums.ParseMode.HTML)
     silicon_botz = await total_user()
-    await silicon.edit(f"<blockquote>Tᴏᴛᴀʟ Usᴇʀ :- `{silicon_botz}`</blockquote>", parse_mode="html")
+    await silicon.edit(f"<blockquote>Tᴏᴛᴀʟ Usᴇʀ :- `{silicon_botz}`</blockquote>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["broadcast"]))
 async def broadcast(bot, message):
     if message.reply_to_message:
-        silicon = await message.reply_text("<blockquote>Geting All ids from database..\n Please wait</blockquote>", parse_mode="html")
+        silicon = await message.reply_text("<blockquote>Geting All ids from database..\n Please wait</blockquote>", parse_mode=enums.ParseMode.HTML)
         all_users = await getid()
         tot = await total_user()
         success = 0
         failed = 0
         deactivated = 0
         blocked = 0
-        await silicon.edit(f"<blockquote>ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ...</blockquote>", parse_mode="html")
+        await silicon.edit(f"<blockquote>ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ...</blockquote>", parse_mode=enums.ParseMode.HTML)
         async for user in all_users:
             try:
                 await message.reply_to_message.copy(user['_id'])
@@ -94,13 +94,13 @@ async def broadcast(bot, message):
             try:
                 await silicon.edit(
                     f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴘʀᴏᴄᴇssɪɴɢ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
-                    parse_mode="html"
+                    parse_mode=enums.ParseMode.HTML
                 )
             except FloodWait as e:
                 await asyncio.sleep(e.x)
         await silicon.edit(
             f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command("restart"))
@@ -108,10 +108,10 @@ async def restart_bot(b, m):
     silicon = await b.send_message(
         text="<blockquote>𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...</blockquote>",
         chat_id=m.chat.id,
-        parse_mode="html"
+        parse_mode=enums.ParseMode.HTML
     )       
     await asyncio.sleep(3)
-    await silicon.edit("<blockquote>𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴</blockquote>", parse_mode="html")
+    await silicon.edit("<blockquote>𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴</blockquote>", parse_mode=enums.ParseMode.HTML)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 @Client.on_message(filters.command("set_cap") & filters.channel)
@@ -119,7 +119,7 @@ async def setCap(bot, message):
     if len(message.command) < 2:
         return await message.reply(
             "<blockquote>Usᴀɢᴇ: <b>/set_cap 𝑌𝑜𝑢𝑟 𝑐𝑎𝑝𝑡𝑖𝑜𝑛</b> 𝑈𝑠𝑒 <code>{file_name}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑁𝑎𝑚𝑒.\n\n𝑈𝑠𝑒 <code>{file_size}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑆𝑖𝑧𝑒\n\n✓ 𝑀𝑎𝑦 𝐵𝑒 𝑁𝑜𝑤 𝑌𝑜𝑢 𝑎𝑟𝑒 𝑐𝑙𝑒𝑎𝑟💫</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     chnl_id = message.chat.id
     caption = (
@@ -130,13 +130,13 @@ async def setCap(bot, message):
         await updateCap(chnl_id, caption)
         return await message.reply(
             f"<blockquote>Your New Caption: {html.escape(caption)}</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     else:
         await addCap(chnl_id, caption)
         return await message.reply(
             f"<blockquote>Yᴏᴜʀ Nᴇᴡ Cᴀᴘᴛɪᴏɴ Is: {html.escape(caption)}</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
 
 @Client.on_message(filters.command("set_font") & filters.channel)
@@ -144,25 +144,25 @@ async def setFont(bot, message):
     if len(message.command) < 2:
         return await message.reply(
             f"<blockquote>Usᴀɢᴇ: <b>/set_font STYLE</b>\n\nAvailable styles: {', '.join(VALID_FONT_STYLES)}\n\nExample: /set_font BLOCKQUOTE</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     chnl_id = message.chat.id
     font_style = message.command[1].upper()
     if font_style not in VALID_FONT_STYLES:
         return await message.reply(
             f"<blockquote>Invalid font style! Choose from: {', '.join(VALID_FONT_STYLES)}</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     chkData = await chnl_ids.find_one({"chnl_id": chnl_id})
     if not chkData:
         return await message.reply(
             "<blockquote>No caption set for this channel. Use /set_cap first.</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     await updateFontStyle(chnl_id, font_style)
     await message.reply(
         f"<blockquote>Font style set to: {font_style}</blockquote>",
-        parse_mode="html"
+        parse_mode=enums.ParseMode.HTML
     )
 
 @Client.on_message(filters.command("del_cap") & filters.channel)
@@ -172,12 +172,12 @@ async def delCap(_, msg):
         await chnl_ids.delete_one({"chnl_id": chnl_id})
         return await msg.reply(
             "<blockquote><b><i>✓ Sᴜᴄᴄᴇssғᴜʟʟʏ... Dᴇʟᴇᴛᴇᴅ Yᴏᴜʀ Cᴀᴘᴛɪᴏɴ Nᴏᴡ I ᴀᴍ Usɪɴɢ Mʏ Dᴇғᴀᴜʟᴛ Cᴀᴘᴛɪᴏɴ </i></b></blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
     except Exception as e:
         e_val = await msg.reply(
             f"<blockquote>ERR I GOT: {html.escape(str(e))}</blockquote>",
-            parse_mode="html"
+            parse_mode=enums.ParseMode.HTML
         )
         await asyncio.sleep(5)
         await e_val.delete()
@@ -269,7 +269,7 @@ async def start(bot, query):
                 ]
             ]
         ),
-        parse_mode="html"
+        parse_mode=enums.ParseMode.HTML
     )
 
 @Client.on_callback_query(filters.regex(r'^help'))
@@ -285,7 +285,7 @@ async def help(bot, query):
                 ]
             ]
         ),
-        parse_mode="html"    
+        parse_mode=enums.ParseMode.HTML
     )
 
 @Client.on_callback_query(filters.regex(r'^about'))
@@ -301,5 +301,5 @@ async def about(bot, query):
                 ]
             ]
         ),
-        parse_mode="html"
-    )
+        parse_mode=enums.ParseMode.HTML
+        )
