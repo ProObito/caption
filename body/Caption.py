@@ -9,6 +9,11 @@ import re
 import os
 import sys
 import html
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Supported font styles
 VALID_FONT_STYLES = ["BOLD", "ITALIC", "UNDERLINE", "STRIKETHROUGH", "MONOSPACE", "SPOILER", "BLOCKQUOTE", "NONE"]
@@ -18,7 +23,7 @@ def format_caption(text: str, font_style: str) -> tuple[str, str]:
     Format the caption text with the specified font style.
     Returns (formatted_text, parse_mode).
     """
-    text = html.escape(text)  # Escape HTML special characters
+    text = html.escape(text)
     if font_style == "BOLD":
         return f"<b>{text}</b>", enums.ParseMode.HTML
     elif font_style == "ITALIC":
@@ -33,7 +38,7 @@ def format_caption(text: str, font_style: str) -> tuple[str, str]:
         return f"<spoiler>{text}</spoiler>", enums.ParseMode.HTML
     elif font_style == "BLOCKQUOTE":
         return f"<blockquote>{text}</blockquote>", enums.ParseMode.HTML
-    else:  # NONE or invalid
+    else:
         return text, None
 
 @Client.on_message(filters.command("start") & filters.private)
@@ -52,12 +57,16 @@ async def strtCap(bot, message):
                 InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
         ]]
     )
-    await message.reply_photo(
-        photo=SILICON_PIC,
-        caption=script.START_TXT.format(html.escape(message.from_user.mention)),
-        parse_mode=enums.ParseMode.HTML,
-        reply_markup=keyboard
-    )
+    try:
+        await message.reply_photo(
+            photo=SILICON_PIC,
+            caption=script.START_TXT.format(html.escape(message.from_user.mention)),
+            parse_mode=enums.ParseMode.HTML,
+            reply_markup=keyboard
+        )
+    except Exception as e:
+        logger.error(f"Error in /start: {str(e)}")
+        await message.reply_text("<b>An error occurred. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["total_users"]))
 async def all_db_users_here(client, message):
@@ -99,7 +108,7 @@ async def broadcast(bot, message):
             except FloodWait as e:
                 await asyncio.sleep(e.x)
         await silicon.edit(
-            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
+            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴴ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
             parse_mode=enums.ParseMode.HTML
         )
 
@@ -254,52 +263,68 @@ def get_size(size):
 
 @Client.on_callback_query(filters.regex(r'^start'))
 async def start(bot, query):
-    await query.message.edit_text(
-        text=script.START_TXT.format(html.escape(query.from_user.mention)),
-        reply_markup=InlineKeyboardMarkup(
-            [
+    try:
+        await query.message.edit_text(
+            text=script.START_TXT.format(html.escape(query.from_user.mention)),
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
-                ],[
-                    InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
-                    InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeflixSupport")
-                ],[
-                    InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                    InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
+                    [
+                        InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
+                    ],[
+                        InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
+                        InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeflixSupport")
+                    ],[
+                        InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                        InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
+                    ]
                 ]
-            ]
-        ),
-        parse_mode=enums.ParseMode.HTML
-    )
+            ),
+            parse_mode=enums.ParseMode.HTML
+        )
+    except Exception as e:
+        logger.error(f"Error in start callback: {str(e)}")
+        await query.message.reply_text("<b>An error occurred. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_callback_query(filters.regex(r'^help'))
 async def help(bot, query):
-    await query.message.edit_text(
-        text=f"<blockquote>{html.escape(script.HELP_TXT)}</blockquote>",
-        reply_markup=InlineKeyboardMarkup(
-            [
+    try:
+        await query.message.edit_text(
+            text=script.HELP_TXT,
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
-                ],[
-                    InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    [
+                        InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
+                    ],[
+                        InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    ]
                 ]
-            ]
-        ),
-        parse_mode=enums.ParseMode.HTML
-    )
+            ),
+            parse_mode=enums.ParseMode.HTML
+        )
+        await query.answer("Help menu displayed")
+    except Exception as e:
+        logger.error(f"Error in help callback: {str(e)}")
+        await query.message.reply_text("<b>Failed to display help. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.answer("Error occurred")
 
 @Client.on_callback_query(filters.regex(r'^about'))
 async def about(bot, query):
-    await query.message.edit_text(
-        text=f"<blockquote>{html.escape(script.ABOUT_TXT)}</blockquote>",
-        reply_markup=InlineKeyboardMarkup(
-            [
+    try:
+        await query.message.edit_text(
+            text=script.ABOUT_TXT,
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
-                ],[
-                    InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    [
+                        InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
+                    ],[
+                        InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    ]
                 ]
-            ]
-        ),
-        parse_mode=enums.ParseMode.HTML
-                                          )
+            ),
+            parse_mode=enums.ParseMode.HTML
+        )
+        await query.answer("About menu displayed")
+    except Exception as e:
+        logger.error(f"Error in about callback: {str(e)}")
+        await query.message.reply_text("<b>Failed to display about. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.answer("Error occurred")
