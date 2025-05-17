@@ -1,11 +1,40 @@
-from pyrogram import *
+from pyrofork import Client, filters
+from pyrofork.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrofork.errors import FloodWait
 from info import *
 import asyncio
 from Script import script
 from .database import *
 import re
-from pyrogram.errors import FloodWait
-from pyrogram.types import *
+import os
+import sys
+import html
+
+# Supported font styles
+VALID_FONT_STYLES = ["BOLD", "ITALIC", "UNDERLINE", "STRIKETHROUGH", "MONOSPACE", "SPOILER", "BLOCKQUOTE", "NONE"]
+
+def format_caption(text: str, font_style: str) -> tuple[str, str]:
+    """
+    Format the caption text with the specified font style.
+    Returns (formatted_text, parse_mode).
+    """
+    text = html.escape(text)  # Escape HTML special characters
+    if font_style == "BOLD":
+        return f"<b>{text}</b>", "html"
+    elif font_style == "ITALIC":
+        return f"<i>{text}</i>", "html"
+    elif font_style == "UNDERLINE":
+        return f"<u>{text}</u>", "html"
+    elif font_style == "STRIKETHROUGH":
+        return f"<s>{text}</s>", "html"
+    elif font_style == "MONOSPACE":
+        return f"<code>{text}</code>", "html"
+    elif font_style == "SPOILER":
+        return f"<spoiler>{text}</spoiler>", "html"
+    elif font_style == "BLOCKQUOTE":
+        return f"<blockquote>{text}</blockquote>", "html"
+    else:  # NONE or invalid
+        return text, None
 
 @Client.on_message(filters.command("start") & filters.private)
 async def strtCap(bot, message):
@@ -17,7 +46,7 @@ async def strtCap(bot, message):
                 InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
             ],[
                 InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
-                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeFlixsupport")
+                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeflixSupport")
             ],[
                 InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
                 InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
@@ -25,60 +54,72 @@ async def strtCap(bot, message):
     )
     await message.reply_photo(
         photo=SILICON_PIC,
-        caption=f"<b>Hᴇʟʟᴏ {message.from_user.mention}\n\nɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ.\n\nFᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ᴄʟɪᴄᴋ ᴏɴ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ.\n\nMᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ »<a href='https://t.me/CodeFlix_Bots'>ᴄᴏᴅᴇғʟɪx</a></b>",
+        caption=f"<blockquote>{html.escape(script.START_TXT.format(message.from_user.mention))}</blockquote>",
+        parse_mode="html",
         reply_markup=keyboard
     )
 
-@Client.on_message(filters.private & filters.user(ADMIN)  & filters.command(["total_users"]))
-async def all_db_users_here(client,message):
-    silicon = await message.reply_text("Please Wait....")
+@Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["total_users"]))
+async def all_db_users_here(client, message):
+    silicon = await message.reply_text("<blockquote>Please Wait....</blockquote>", parse_mode="html")
     silicon_botz = await total_user()
-    await silicon.edit(f"Tᴏᴛᴀʟ Usᴇʀ :- `{silicon_botz}`")
+    await silicon.edit(f"<blockquote>Tᴏᴛᴀʟ Usᴇʀ :- `{silicon_botz}`</blockquote>", parse_mode="html")
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["broadcast"]))
 async def broadcast(bot, message):
-    if (message.reply_to_message):
-        silicon = await message.reply_text("Geting All ids from database..\n Please wait")
+    if message.reply_to_message:
+        silicon = await message.reply_text("<blockquote>Geting All ids from database..\n Please wait</blockquote>", parse_mode="html")
         all_users = await getid()
         tot = await total_user()
         success = 0
         failed = 0
         deactivated = 0
         blocked = 0
-        await silicon.edit(f"ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ...")
+        await silicon.edit(f"<blockquote>ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ...</blockquote>", parse_mode="html")
         async for user in all_users:
             try:
-                time.sleep(1)
                 await message.reply_to_message.copy(user['_id'])
                 success += 1
-            except errors.InputUserDeactivated:
-                deactivated +=1
-                await delete({"_id": user['_id']})
-            except errors.UserIsBlocked:
-                blocked +=1
-                await delete({"_id": user['_id']})
-            except Exception as e:
-                failed += 1
-                await delete({"_id": user['_id']})
-                pass
-            try:
-                await silicon.edit(f"<u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴘʀᴏᴄᴇssɪɴɢ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}")
             except FloodWait as e:
-                await asyncio.sleep(t.x)
-        await silicon.edit(f"<u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}")
+                await asyncio.sleep(e.x)
+                continue
+            except Exception as e:
+                if "USER_IS_BLOCKED" in str(e):
+                    blocked += 1
+                elif "USER_ID_INVALID" in str(e) or "USER_IS_DEACTIVATED" in str(e):
+                    deactivated += 1
+                else:
+                    failed += 1
+                await delete({"_id": user['_id']})
+            try:
+                await silicon.edit(
+                    f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴘʀᴏᴄᴇssɪɴɢ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
+                    parse_mode="html"
+                )
+            except FloodWait as e:
+                await asyncio.sleep(e.x)
+        await silicon.edit(
+            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʜ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
+            parse_mode="html"
+        )
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command("restart"))
 async def restart_bot(b, m):
-    silicon = await b.send_message(text="**𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...**", chat_id=m.chat.id)       
+    silicon = await b.send_message(
+        text="<blockquote>𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...</blockquote>",
+        chat_id=m.chat.id,
+        parse_mode="html"
+    )       
     await asyncio.sleep(3)
-    await silicon.edit("**𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴**")
+    await silicon.edit("<blockquote>𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴</blockquote>", parse_mode="html")
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 @Client.on_message(filters.command("set_cap") & filters.channel)
 async def setCap(bot, message):
     if len(message.command) < 2:
         return await message.reply(
-            "Usᴀɢᴇ: **/set_cap 𝑌𝑜𝑢𝑟 𝑐𝑎𝑝𝑡𝑖𝑜𝑛 𝑈𝑠𝑒 <code>{file_name}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑁𝑎𝑚𝑒.\n\n𝑈𝑠𝑒<code>{file_size}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑆𝑖𝑧𝑒/n/n✓ 𝑀𝑎𝑦 𝐵𝑒 𝑁𝑜𝑤 𝑌𝑜𝑢 𝑎𝑟𝑒 𝑐𝑙𝑒𝑎𝑟💫**"
+            "<blockquote>Usᴀɢᴇ: <b>/set_cap 𝑌𝑜𝑢𝑟 𝑐𝑎𝑝𝑡𝑖𝑜𝑛</b> 𝑈𝑠𝑒 <code>{file_name}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑁𝑎𝑚𝑒.\n\n𝑈𝑠𝑒 <code>{file_size}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑆𝑖𝑧𝑒\n\n✓ 𝑀𝑎𝑦 𝐵𝑒 𝑁𝑜𝑤 𝑌𝑜𝑢 𝑎𝑟𝑒 𝑐𝑙𝑒𝑎𝑟💫</blockquote>",
+            parse_mode="html"
         )
     chnl_id = message.chat.id
     caption = (
@@ -87,38 +128,78 @@ async def setCap(bot, message):
     chkData = await chnl_ids.find_one({"chnl_id": chnl_id})
     if chkData:
         await updateCap(chnl_id, caption)
-        return await message.reply(f"Your New Caption: {caption}")
+        return await message.reply(
+            f"<blockquote>Your New Caption: {html.escape(caption)}</blockquote>",
+            parse_mode="html"
+        )
     else:
         await addCap(chnl_id, caption)
-        return await message.reply(f"Yᴏᴜʀ Nᴇᴡ Cᴀᴘᴛɪᴏɴ Is: {caption}")
+        return await message.reply(
+            f"<blockquote>Yᴏᴜʀ Nᴇᴡ Cᴀᴘᴛɪᴏɴ Is: {html.escape(caption)}</blockquote>",
+            parse_mode="html"
+        )
+
+@Client.on_message(filters.command("set_font") & filters.channel)
+async def setFont(bot, message):
+    if len(message.command) < 2:
+        return await message.reply(
+            f"<blockquote>Usᴀɢᴇ: <b>/set_font STYLE</b>\n\nAvailable styles: {', '.join(VALID_FONT_STYLES)}\n\nExample: /set_font BLOCKQUOTE</blockquote>",
+            parse_mode="html"
+        )
+    chnl_id = message.chat.id
+    font_style = message.command[1].upper()
+    if font_style not in VALID_FONT_STYLES:
+        return await message.reply(
+            f"<blockquote>Invalid font style! Choose from: {', '.join(VALID_FONT_STYLES)}</blockquote>",
+            parse_mode="html"
+        )
+    chkData = await chnl_ids.find_one({"chnl_id": chnl_id})
+    if not chkData:
+        return await message.reply(
+            "<blockquote>No caption set for this channel. Use /set_cap first.</blockquote>",
+            parse_mode="html"
+        )
+    await updateFontStyle(chnl_id, font_style)
+    await message.reply(
+        f"<blockquote>Font style set to: {font_style}</blockquote>",
+        parse_mode="html"
+    )
 
 @Client.on_message(filters.command("del_cap") & filters.channel)
 async def delCap(_, msg):
     chnl_id = msg.chat.id
     try:
         await chnl_ids.delete_one({"chnl_id": chnl_id})
-        return await msg.reply("<b><i>✓ Sᴜᴄᴄᴇssғᴜʟʟʏ... Dᴇʟᴇᴛᴇᴅ Yᴏᴜʀ Cᴀᴘᴛɪᴏɴ Nᴏᴡ I ᴀᴍ Usɪɴɢ Mʏ Dᴇғᴀᴜʟᴛ Cᴀᴘᴛɪᴏɴ </i></b>")
+        return await msg.reply(
+            "<blockquote><b><i>✓ Sᴜᴄᴄᴇssғᴜʟʟʏ... Dᴇʟᴇᴛᴇᴅ Yᴏᴜʀ Cᴀᴘᴛɪᴏɴ Nᴏᴡ I ᴀᴍ Usɪɴɢ Mʏ Dᴇғᴀᴜʟᴛ Cᴀᴘᴛɪᴏɴ </i></b></blockquote>",
+            parse_mode="html"
+        )
     except Exception as e:
-        e_val = await msg.replay(f"ERR I GOT: {e}")
+        e_val = await msg.reply(
+            f"<blockquote>ERR I GOT: {html.escape(str(e))}</blockquote>",
+            parse_mode="html"
+        )
         await asyncio.sleep(5)
         await e_val.delete()
         return
 
 def extract_language(default_caption):
-    language_pattern = r'\b(Hindi|English|Tamil|Telugu|Malayalam|Kannada|Hin)\b'#Contribute More Language If You Have
-    languages = set(re.findall(language_pattern, default_caption, re.IGNORECASE))
-    if not languages:
+    if not default_caption:
         return "Hindi-English"
-    return ", ".join(sorted(languages, key=str.lower))
+    language_pattern = r'\b(Hindi|English|Tamil|Telugu|Malayalam|Kannada|Hin)\b'
+    languages = set(re.findall(language_pattern, default_caption, re.IGNORECASE))
+    return ", ".join(sorted(languages, key=str.lower)) if languages else "Hindi-English"
 
 def extract_year(default_caption):
+    if not default_caption:
+        return None
     match = re.search(r'\b(19\d{2}|20\d{2})\b', default_caption)
     return match.group(1) if match else None
 
 @Client.on_message(filters.channel)
 async def reCap(bot, message):
     chnl_id = message.chat.id
-    default_caption = message.caption
+    default_caption = message.caption or ""
     if message.media:
         for file_type in ("video", "audio", "document", "voice"):
             obj = getattr(message, file_type, None)
@@ -136,11 +217,26 @@ async def reCap(bot, message):
                 try:
                     if cap_dets:
                         cap = cap_dets["caption"]
-                        replaced_caption = cap.format(file_name=file_name, file_size=get_size(file_size), default_caption=default_caption, language=language, year=year)
-                        await message.edit(replaced_caption)
+                        font_style = cap_dets.get("font_style", "NONE")
+                        replaced_caption = cap.format(
+                            file_name=file_name,
+                            file_size=get_size(file_size),
+                            default_caption=default_caption,
+                            language=language,
+                            year=year
+                        )
+                        formatted_caption, parse_mode = format_caption(replaced_caption, font_style)
+                        await message.edit_caption(caption=formatted_caption, parse_mode=parse_mode)
                     else:
-                        replaced_caption = DEF_CAP.format(file_name=file_name, file_size=get_size(file_size), default_caption=default_caption, language=language, year=year)
-                        await message.edit(replaced_caption)
+                        replaced_caption = DEF_CAP.format(
+                            file_name=file_name,
+                            file_size=get_size(file_size),
+                            default_caption=default_caption,
+                            language=language,
+                            year=year
+                        )
+                        formatted_caption, parse_mode = format_caption(replaced_caption, "NONE")
+                        await message.edit_caption(caption=formatted_caption, parse_mode=parse_mode)
                 except FloodWait as e:
                     await asyncio.sleep(e.x)
                     continue
@@ -151,7 +247,7 @@ def get_size(size):
     units = ["Bytes", "Kʙ", "Mʙ", "Gʙ", "Tʙ", "Pʙ", "Eʙ"]
     size = float(size)
     i = 0
-    while size >= 1024.0 and i < len(units) - 1:  # Changed the condition to stop at the last unit
+    while size >= 1024.0 and i < len(units) - 1:
         i += 1
         size /= 1024.0
     return "%.2f %s" % (size, units[i])
@@ -159,49 +255,51 @@ def get_size(size):
 @Client.on_callback_query(filters.regex(r'^start'))
 async def start(bot, query):
     await query.message.edit_text(
-        text=script.START_TXT.format(query.from_user.mention),  
-        keyboard = InlineKeyboardMarkup(
-        [
+        text=f"<blockquote>{html.escape(script.START_TXT.format(query.from_user.mention))}</blockquote>",  
+        reply_markup=InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
-            ],[
-                InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
-                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeFlixsupport")
-            ],[
-                InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
-        ]]
+                [
+                    InlineKeyboardButton("• ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ •", url=f"http://t.me/Tessia_Caption_Bot?startchannel=true")
+                ],[
+                    InlineKeyboardButton("• ᴜᴘᴅᴀᴛᴇ", url=f"https://t.me/CodeFlix_Bots"),
+                    InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ •", url=f"https://t.me/CodeflixSupport")
+                ],[
+                    InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                    InlineKeyboardButton("ᴄᴀᴍᴍᴀɴᴅ •", callback_data="help")
+                ]
+            ]
         ),
-        disable_web_page_preview=True
-)
+        parse_mode="html"
+    )
 
 @Client.on_callback_query(filters.regex(r'^help'))
 async def help(bot, query):
     await query.message.edit_text(
-        text=script.HELP_TXT,
+        text=f"<blockquote>{html.escape(script.HELP_TXT)}</blockquote>",
         reply_markup=InlineKeyboardMarkup(
-            [[
-            InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
-            ],[
-            InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
-            ]]
+            [
+                [
+                    InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
+                ],[
+                    InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                ]
+            ]
         ),
-        disable_web_page_preview=True    
-)
-
+        parse_mode="html"    
+    )
 
 @Client.on_callback_query(filters.regex(r'^about'))
 async def about(bot, query):
     await query.message.edit_text(
-        text=script.ABOUT_TXT,
+        text=f"<blockquote>{html.escape(script.ABOUT_TXT)}</blockquote>",
         reply_markup=InlineKeyboardMarkup(
-            [[
-            InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
-            ],[
-            InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
-            ]]
+            [
+                [
+                    InlineKeyboardButton('• ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ •', callback_data='help')
+                ],[
+                    InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                ]
+            ]
         ),
-        disable_web_page_preview=True 
-
-)
-
+        parse_mode="html"
+        )
