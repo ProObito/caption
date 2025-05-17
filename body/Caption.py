@@ -54,7 +54,7 @@ async def strtCap(bot, message):
     )
     await message.reply_photo(
         photo=SILICON_PIC,
-        caption=f"<blockquote>{html.escape(script.START_TXT.format(message.from_user.mention))}</blockquote>",
+        caption=script.START_TXT.format(html.escape(message.from_user.mention)),
         parse_mode=enums.ParseMode.HTML,
         reply_markup=keyboard
     )
@@ -255,7 +255,7 @@ def get_size(size):
 @Client.on_callback_query(filters.regex(r'^start'))
 async def start(bot, query):
     await query.message.edit_text(
-        text=f"<blockquote>{html.escape(script.START_TXT.format(query.from_user.mention))}</blockquote>",  
+        text=script.START_TXT.format(html.escape(query.from_user.mention)),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -302,4 +302,4 @@ async def about(bot, query):
             ]
         ),
         parse_mode=enums.ParseMode.HTML
-        )
+                                          )
