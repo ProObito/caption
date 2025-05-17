@@ -26,7 +26,7 @@ class Bot(Client):
                 print(e)
                 print("Make Sure Bot admin in force sub channel")
                 self.force_channel = None
-        print(f"{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️")
+        print(f"<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️<b><blockquote expandable>")
         await self.send_message(ADMIN, f"**{me.first_name}  Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️**")
 
 
