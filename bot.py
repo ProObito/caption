@@ -57,7 +57,7 @@ class Bot(Client):
                     caption=("<b><blockquote expandable>
                         f"**{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️**\n\n"
                         f"**Uptime**: `{uptime_string}`\n"
-                        f"**Started by**: {me.mention}<b><blockquote expandable>"
+                        f"**Started by**: {me.mention}<b><blockquote expandable>""
                     ),
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("Updates", url="https://t.me/codeflix_bots")]]
