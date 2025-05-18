@@ -2,6 +2,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 from info import *
+from f_sub import f_sub
 import asyncio
 from Script import script
 from .database import *
@@ -11,19 +12,12 @@ import sys
 import html
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Supported font styles
 VALID_FONT_STYLES = ["BOLD", "ITALIC", "UNDERLINE", "STRIKETHROUGH", "MONOSPACE", "SPOILER", "BLOCKQUOTE", "NONE"]
 
 def format_caption(text: str, font_style: str) -> tuple[str, str]:
-    """
-    Format the caption text with the specified font style.
-    Returns (formatted_text, parse_mode).
-    """
-    text = html.escape(text)
     if font_style == "BOLD":
         return f"<b>{text}</b>", enums.ParseMode.HTML
     elif font_style == "ITALIC":
@@ -39,9 +33,9 @@ def format_caption(text: str, font_style: str) -> tuple[str, str]:
     elif font_style == "BLOCKQUOTE":
         return f"<blockquote>{text}</blockquote>", enums.ParseMode.HTML
     else:
-        return text, None
+        return text, enums.ParseMode.HTML  # HTML for links
 
-@Client.on_message(filters.command("start") & filters.private)
+@Client.on_message(filters.command("start") & filters.private & ~f_sub)
 async def strtCap(bot, message):
     user_id = int(message.from_user.id)
     await insert(user_id)
@@ -66,7 +60,7 @@ async def strtCap(bot, message):
         )
     except Exception as e:
         logger.error(f"Error in /start: {str(e)}")
-        await message.reply_text("<b>An error occurred. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await message.reply_text("<b>An error occurred. Try again or contact support.</b>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["total_users"]))
 async def all_db_users_here(client, message):
@@ -108,7 +102,7 @@ async def broadcast(bot, message):
             except FloodWait as e:
                 await asyncio.sleep(e.x)
         await silicon.edit(
-            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴴ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
+            f"<blockquote><u>ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>\n\n• ᴛᴏᴛᴀʟ ᴜsᴇʀs: {tot}\n• sᴜᴄᴄᴇssғᴜʟ: {success}\n• ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs: {blocked}\n• ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛs: {deactivated}\n• ᴜɴsᴜᴄᴄᴇssғᴜʟ: {failed}</blockquote>",
             parse_mode=enums.ParseMode.HTML
         )
 
@@ -127,7 +121,7 @@ async def restart_bot(b, m):
 async def setCap(bot, message):
     if len(message.command) < 2:
         return await message.reply(
-            "<blockquote>Usᴀɢᴇ: <b>/set_cap 𝑌𝑜𝑢𝑟 𝑐𝑎𝑝𝑡𝑖𝑜𝑛</b> 𝑈𝑠𝑒 <code>{file_name}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑁𝑎𝑚𝑒.\n\n𝑈𝑠𝑒 <code>{file_size}</code> 𝑇𝑜 𝑠ℎ𝑜𝑤 𝑦𝑜𝑢𝑟 𝐹𝑖𝑙𝑒 𝑆𝑖𝑧𝑒\n\n✓ 𝑀𝑎𝑦 𝐵𝑒 𝑁𝑜𝑤 𝑌𝑜𝑢 𝑎𝑟𝑒 𝑐𝑙𝑒𝑎𝑟💫</blockquote>",
+            "<blockquote>Usᴀɢᴇ: <b>/set_cap 𝑌𝑜𝑢𝑟 𝑐𝑎𝑝𝑡𝑖𝑜𝑛</b>\nUse <code>{file_name}</code> for file name.\nUse <code>{file_size}</code> for file size.\nUse <code>{link}</code> for clickable link.\n\nExample: <code>/set_cap <a href='{link}'>{file_name}</a> - {file_size}</code></blockquote>",
             parse_mode=enums.ParseMode.HTML
         )
     chnl_id = message.chat.id
@@ -227,20 +221,22 @@ async def reCap(bot, message):
                     if cap_dets:
                         cap = cap_dets["caption"]
                         font_style = cap_dets.get("font_style", "NONE")
+                        link = getattr(obj, "web_page_url", "https://t.me/CodeFlix_Bots")  # Fallback link
                         replaced_caption = cap.format(
-                            file_name=file_name,
+                            file_name=html.escape(file_name),
                             file_size=get_size(file_size),
-                            default_caption=default_caption,
+                            default_caption=html.escape(default_caption),
                             language=language,
-                            year=year
+                            year=year,
+                            link=link
                         )
                         formatted_caption, parse_mode = format_caption(replaced_caption, font_style)
                         await message.edit_caption(caption=formatted_caption, parse_mode=parse_mode)
                     else:
                         replaced_caption = DEF_CAP.format(
-                            file_name=file_name,
+                            file_name=html.escape(file_name),
                             file_size=get_size(file_size),
-                            default_caption=default_caption,
+                            default_caption=html.escape(default_caption),
                             language=language,
                             year=year
                         )
@@ -249,9 +245,11 @@ async def reCap(bot, message):
                 except FloodWait as e:
                     await asyncio.sleep(e.x)
                     continue
+                except Exception as e:
+                    logger.error(f"Error formatting caption: {str(e)}")
+                    await message.reply_text(f"<b>Error: {html.escape(str(e))}</b>", parse_mode=enums.ParseMode.HTML)
     return
 
-# Size conversion function
 def get_size(size):
     units = ["Bytes", "Kʙ", "Mʙ", "Gʙ", "Tʙ", "Pʙ", "Eʙ"]
     size = float(size)
@@ -281,9 +279,11 @@ async def start(bot, query):
             ),
             parse_mode=enums.ParseMode.HTML
         )
+        await query.answer("Start menu displayed")
     except Exception as e:
         logger.error(f"Error in start callback: {str(e)}")
-        await query.message.reply_text("<b>An error occurred. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.message.reply_text("<b>An error occurred. Try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.answer("Error occurred")
 
 @Client.on_callback_query(filters.regex(r'^help'))
 async def help(bot, query):
@@ -304,7 +304,7 @@ async def help(bot, query):
         await query.answer("Help menu displayed")
     except Exception as e:
         logger.error(f"Error in help callback: {str(e)}")
-        await query.message.reply_text("<b>Failed to display help. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.message.reply_text("<b>Failed to display help. Try again or contact support.</b>", parse_mode=enums.ParseMode.HTML)
         await query.answer("Error occurred")
 
 @Client.on_callback_query(filters.regex(r'^about'))
@@ -326,5 +326,5 @@ async def about(bot, query):
         await query.answer("About menu displayed")
     except Exception as e:
         logger.error(f"Error in about callback: {str(e)}")
-        await query.message.reply_text("<b>Failed to display about. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.message.reply_text("<b>Failed to display about. Try again.</b>", parse_mode=enums.ParseMode.HTML)
         await query.answer("Error occurred")
