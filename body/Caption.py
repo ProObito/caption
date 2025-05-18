@@ -328,3 +328,25 @@ async def about(bot, query):
         logger.error(f"Error in about callback: {str(e)}")
         await query.message.reply_text("<b>Failed to display about. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
         await query.answer("Error occurred")
+
+@Client.on_callback_query(filters.regex(r'^font'))
+async def help(bot, query):
+    try:
+        await query.message.edit_text(
+            text=script.FONT_TXT,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
+                    ],[
+                        InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    ]
+                ]
+            ),
+            parse_mode=enums.ParseMode.HTML
+        )
+        await query.answer("Help menu displayed")
+    except Exception as e:
+        logger.error(f"Error in Font callback: {str(e)}")
+        await query.message.reply_text("<b>Failed to display font. Please try again.</b>", parse_mode=enums.ParseMode.HTML)
+        await query.answer("Error occurred")
