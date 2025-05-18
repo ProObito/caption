@@ -54,11 +54,7 @@ class Bot(Client):
                 await self.send_photo(
                     chat_id=chat_id,
                     photo=info.SILICON_PIC,
-                    caption=("<b><blockquote expandable>
-                        f"**{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️**\n\n"
-                        f"**Uptime**: `{uptime_string}`\n"
-                        f"**Started by**: {me.mention}<b><blockquote expandable>""
-                    ),
+                    caption=("<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️\nUptime: `{uptime_string}`\nStarted by: {me.mention}<b><blockquote expandable>"),
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("Updates", url="https://t.me/codeflix_bots")]]
                     )
