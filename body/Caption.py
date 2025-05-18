@@ -1,5 +1,5 @@
 from pyrogram import Client, filters, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReactionTypeEmoji
 from pyrogram.errors import FloodWait, PeerIdInvalid
 from info import *
 from .f_sub import not_subscribed
@@ -51,7 +51,7 @@ def format_caption(text: str, font_style: str) -> tuple[str, str]:
 async def strtCap(bot, message):
     user_id = int(message.from_user.id)
     await insert(user_id)
-    # Initial interactive text and sticker sequence
+    # Initial interactive text sequence
     m = await message.reply_text("ʜᴇʜᴇ..ɪ'ᴍ ᴀɴʏᴀ!\nᴡᴀɪᴛ ᴀ ᴍᴏᴍᴇɴᴛ. . .")
     await asyncio.sleep(0.4)
     await m.edit_text("🎊")
@@ -75,18 +75,31 @@ async def strtCap(bot, message):
         ]]
     )
     try:
-        sent_message = await bot.send_animation(
-            chat_id=message.chat.id,
-            animation=START_GIF,
-            caption=script.START_TXT.format(html.escape(message.from_user.mention)),
-            parse_mode=enums.ParseMode.HTML,
-            reply_markup=keyboard
-        )
-        # Add reaction to start message
+        # Use a placeholder or configurable animation file ID
+        animation_id = START_GIF if 'CAACAgUAAxkBAAEFBAVoH4qTFGwjwrCkLJPeM0HjglJpYgACXAgAArSfGVXK3kCuYAiK2B4E' in globals() and START_GIF else None
+        caption_text = script.START_TXT.format(html.escape(message.from_user.mention))
+        if animation_id:
+            sent_message = await bot.send_animation(
+                chat_id=message.chat.id,
+                animation=animation_id,
+                caption=caption_text,
+                parse_mode=enums.ParseMode.HTML,
+                reply_markup=keyboard
+            )
+        else:
+            # Fallback to text message if no animation ID is provided
+            sent_message = await message.reply_text(
+                caption_text,
+                parse_mode=enums.ParseMode.HTML,
+                reply_markup=keyboard
+            )
+            logger.warning("START_GIF not set. Using text fallback for /start command.")
+        
+        # Add reaction to the sent message
         await bot.set_message_reaction(
             chat_id=message.chat.id,
             message_id=sent_message.id,
-            reaction=ReactionTypeEmoji(emoji=START_REACTION)
+            reaction=ReactionTypeEmoji(emoji=START_REACTION if 'START_REACTION' in globals() else "🎉")
         )
         # Auto-react to user's /start command
         await bot.set_message_reaction(
@@ -95,8 +108,13 @@ async def strtCap(bot, message):
             reaction=ReactionTypeEmoji(emoji="👍")
         )
     except Exception as e:
-        logger.error(f"Error in /start: {str(e)}")
-        await message.reply_text("<b><blockquote>Oᴘs, Sᴏᴍᴇᴛʜɪɴɢ Wᴇɴᴛ Wʀᴏɴɢ! Tʀʏ Aɢᴀɪɴ Oʀ Hɪᴛ Uᴘ <a href='https://t.me/CodeflixSupport'>Sᴜᴘᴘᴏʀᴛ</a>.<blockquote></b>", parse_mode=enums.ParseMode.HTML)
+        logger.error(f"Error in /start: {str(e)}, START_GIF: {animation_id if animation_id else 'Not set'}")
+        await message.reply_text(
+            "<b><blockquote>Oᴘs, Sᴏᴍᴇᴛʜɪɴɢ Wᴇɴᴛ Wʀᴏɴɢ! Tʀʏ Aɢᴀɪɴ Oʀ Hɪᴛ Uᴘ <a href='https://t.me/CodeflixSupport'>Sᴜᴘᴘᴏʀᴛ</a>.<blockquote></b>",
+            parse_mode=enums.ParseMode.HTML
+        )
+        if "Expected ANIMATION, got STICKER" in str(e):
+            logger.error(f"Invalid animation file ID: {animation_id}. Please update START_GIF with a valid animation file ID.")
 
 @Client.on_message(filters.private & filters.user(ADMIN) & filters.command(["total_users"]))
 async def all_db_users_here(client, message):
