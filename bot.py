@@ -22,24 +22,7 @@ class Bot(Client):
         me = await self.get_me()
         self.mention = me.mention
         self.username = me.username
-        self.force_channels = {}  # Dictionary to store channel IDs and their invite links
-
-        # Handle force subscription channels
-        for channel_var, channel_name in [
-            ("FORCE_SUB_1", info.FORCE_SUB_1),
-            ("FORCE_SUB_2", info.FORCE_SUB_2)
-        ]:
-            if channel_name:
-                try:
-                    link = await self.export_chat_invite_link(channel_name)
-                    self.force_channels[channel_name] = link
-                    print(f"Invite link for {channel_name}: {link}")
-                except Exception as e:
-                    print(f"Error generating invite link for {channel_name}: {e}")
-                    print(f"Make sure the bot is an admin in {channel_name}")
-                    self.force_channels[channel_name] = None
-
-        # Print startup message
+         # Print startup message
         print(f"<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️</b></blockquote>")
 
         # Calculate uptime
