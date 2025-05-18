@@ -8,11 +8,11 @@ class Bot(Client):
     def __init__(self):
         super().__init__(
             name="Auto Cap",
-            api_id=info.API_ID,
-            api_hash=info.API_HASH,
-            bot_token=info.BOT_TOKEN,
+            api_id=API_ID,
+            api_hash=API_HASH,
+            bot_token=BOT_TOKEN,
             workers=200,
-            plugins={"root": "body"},  # Ensure the "body" directory exists with plugin files
+            plugins={"root": "body"},
             sleep_threshold=15,
         )
         self.start_time = time.time()  # Track bot start time for uptime
