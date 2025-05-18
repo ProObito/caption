@@ -1,16 +1,26 @@
 import os
 
 class script(object):
-    START_TXT = """<blockquote>Hᴇʟʟᴏ {}<>\n<blockquote>
-ɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ. Fᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ᴏɴ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ, ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ.<blockquote><b>\n
+    START_TXT = """<blockquote>Hᴇʟʟᴏ {}<b>\n<blockquote>
+ɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ. Fᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ᴏɴ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ, ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ.<blockquote></b>\n
 <b>‣ ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/CodeflixSupport'>ᴄᴏᴅᴇғʟɪx</a></blockquote><b>"""
 
     HELP_TXT = """<b>✨ Available Commands</b>
 
 • <b>/set_cap</b> <caption> — <i>Set a custom caption for your channel. Use placeholders for file details.<b>
-  <b>Example: <code>/set_cap 🎥 {file_name} ({language}, {year}) - {file_size}</code><b>
+  <b>Example:</b> <code>/set_cap 🎥 {file_name} ({language}, {year}) - {file_size}</code></b>"""
 
-• <b><blockquote>/set_font</b> <style> — Set the font style for captions. Requires a caption set with /set_cap. Available styles:
+    ABOUT_TXT = """<b>About Me</b>
+<blockquote><b>❍ ᴍʏ ɴᴀᴍᴇ: <a href="https://t.me/tessia_caption_bot">ᴛᴇssɪᴀ</a></b>
+<b>❍ ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href="https://t.me/onlyyuji">ᴄᴏᴅᴇғʟɪx</a></b>
+<b>❍ ᴏᴡɴᴇʀ: <a href="https://t.me/ProYato">ʏᴀᴛᴏ</a><b>
+<b>❍ ʟᴀɴɢᴜᴀɢᴇ: <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a></b>
+<b>❍ ᴅᴀᴛᴀʙᴀsᴇ: <a href="https://www.mongodb.com/">ᴍᴏɴɢᴏ ᴅʙ</a></b>
+<b>❍ ʜᴏsᴛᴇᴅ ᴏɴ: <a href="https://t.me/ProYato">ᴠᴘs</a></b>
+<b>❍ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeFlix_Bots">ᴄᴏᴅᴇғʟɪx</a></b>
+<b>❍ ʜᴇʟᴘ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeflixSupport">ᴄᴏᴅᴇғʟɪx</a></b><blockquote>
+<b>➻ Click the buttons below for help and more info about me.</b>"""
+FONT_TXT = """• <b><blockquote>/set_font</b> <style> — Set the font style for captions. Requires a caption set with /set_cap. Available styles:
   - <b>BOLD</b>: Makes text bold
   - <b>ITALIC</b>: Makes text italic
   - <b>UNDERLINE</b>: Underlines text
@@ -45,16 +55,3 @@ class script(object):
 3. Post a video named "Movie_2023.mp4" (50MB, caption "Hindi 2023").
    Result: <b>🎥 Movie 2023 (Hindi) - 50.00 MB</b>
 """
-
-    ABOUT_TXT = """<b>About Me</b>
-<blockquote>
-<b>❍ ᴍʏ ɴᴀᴍᴇ: <a href="https://t.me/tessia_caption_bot">ᴛᴇssɪᴀ</a><b>
-<b>❍ ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href="https://t.me/onlyyuji">ᴄᴏᴅᴇғʟɪx</a><b>
-<b>❍ ᴏᴡɴᴇʀ: <a href="https://t.me/ProYato">ʏᴀᴛᴏ</a><b>
-<b>❍ ʟᴀɴɢᴜᴀɢᴇ: <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a><b>
-<b>❍ ᴅᴀᴛᴀʙᴀsᴇ: <a href="https://www.mongodb.com/">ᴍᴏɴɢᴏ ᴅʙ</a><b>
-<b>❍ ʜᴏsᴛᴇᴅ ᴏɴ: <a href="https://t.me/ProYato">ᴠᴘs</a><b>
-<b>❍ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeFlix_Bots">ᴄᴏᴅᴇғʟɪx</a><b>
-<b>❍ ʜᴇʟᴘ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeflixSupport">ᴄᴏᴅᴇғʟɪx</a><b>
-<blockquote>
-<b>➻ Click the buttons below for help and more info about me.</b>"""
