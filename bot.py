@@ -3,14 +3,14 @@ from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import timedelta
 import time
-from info import info
+from info import FORCE_SUB_1, FORCE_SUB_2, LOG_CHANNEL
 class Bot(Client):
     def __init__(self):
         super().__init__(
             name="Auto Cap",
-            api_id=Config.API_ID,
-            api_hash=Config.API_HASH,
-            bot_token=Config.BOT_TOKEN,
+            api_id=info.API_ID,
+            api_hash=info.API_HASH,
+            bot_token=info.BOT_TOKEN,
             workers=200,
             plugins={"root": "body"},  # Ensure the "body" directory exists with plugin files
             sleep_threshold=15,
