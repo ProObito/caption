@@ -3,7 +3,7 @@ from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import timedelta
 import time
-from Info import info
+from info import info
 class Bot(Client):
     def __init__(self):
         super().__init__(
