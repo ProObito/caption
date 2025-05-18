@@ -19,6 +19,13 @@ async def updateCap(chnl_id, caption, font_style=None):
 async def updateFontStyle(chnl_id, font_style):
     await chnl_ids.update_one({"chnl_id": chnl_id}, {"$set": {"font_style": font_style}})
 
+async def updateLink(chnl_id, link_text, link_url):
+    await chnl_ids.update_one(
+        {"chnl_id": chnl_id},
+        {"$set": {"link_text": link_text, "link_url": link_url}},
+        upsert=True
+    )
+
 async def insert(user_id):
     user_det = {"_id": user_id}
     try:
