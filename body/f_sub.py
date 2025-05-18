@@ -1,91 +1,34 @@
-from pyrogram import Client, filters, enums
+from pyrogram import Client, filters, enums 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import UserNotParticipant, PeerIdInvalid
-from info import FORCE_SUB_1, FORCE_SUB_2
+from pyrogram.errors import UserNotParticipant
+from info import *
 from .database import insert
-import logging
 
-logger = logging.getLogger(__name__)
-
-async def not_subscribed(_, client: Client, message):
+async def not_subscribed(_, client, message):
     user_id = int(message.from_user.id)
-    await insert(user_id)  # Save user ID to database
-    if not (FORCE_SUB_1 and FORCE_SUB_2):
-        return False  # Proceed if no force sub channels
-    not_joined = []
-    try:
-        # Check first channel
-        try:
-            user = await client.get_chat_member(FORCE_SUB_1, user_id)
-            if user.status == enums.ChatMemberStatus.BANNED:
-                return True  # Banned users can't proceed
-        except UserNotParticipant:
-            not_joined.append(FORCE_SUB_1)
-        except PeerIdInvalid:
-            logger.error(f"Invalid channel ID: {FORCE_SUB_1}")
-            not_joined.append(FORCE_SUB_1)  # Treat as not joined
-        # Check second channel
-        try:
-            user = await client.get_chat_member(FORCE_SUB_2, user_id)
-            if user.status == enums.ChatMemberStatus.BANNED:
-                return True
-        except UserNotParticipant:
-            not_joined.append(FORCE_SUB_2)
-        except PeerIdInvalid:
-            logger.error(f"Invalid channel ID: {FORCE_SUB_2}")
-            not_joined.append(FORCE_SUB_2)
-        return bool(not_joined)  # True if not joined any channel
-    except Exception as e:
-        logger.error(f"Error checking subscription: {str(e)}")
-        return True  # Block on other errors
+    await insert(user_id)
+    if not FORCE_SUB:
+        return False
+    try:             
+        user = await client.get_chat_member(FORCE_SUB, message.from_user.id) 
+        if user.status == enums.ChatMemberStatus.BANNED:
+            return True 
+        else:
+            return False                
+    except UserNotParticipant:
+        pass
+    return True
+
 
 @Client.on_message(filters.private & filters.create(not_subscribed))
-async def forces_sub(client: Client, message):
-    user_id = message.from_user.id
-    buttons = []
-    not_joined = []
-    banned = False
-    # Check first channel
+async def forces_sub(client, message):
+    buttons = [[InlineKeyboardButton(text="• ᴄᴏᴅᴇғʟɪx ʙᴏᴛs •", url=f"https://t.me/{FORCE_SUB}") ]]
+    text = "<blockquote expandable><b>Oiii ʙᴀᴋᴋᴀ!!, ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴛᴏ  ᴀʟʟ ʀᴇǫᴜɪʀᴇᴅ ᴄʜᴀɴɴᴇʟs, ᴊᴏɪɴ ᴛʜᴇ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟs ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ<b><blockquote expandable>"
     try:
-        user = await client.get_chat_member(FORCE_SUB_1, user_id)
-        if user.status == enums.ChatMemberStatus.BANNED:
-            banned = True
-    except UserNotParticipant:
-        not_joined.append(FORCE_SUB_1)
-    except PeerIdInvalid:
-        logger.error(f"Invalid channel ID: {FORCE_SUB_1}")
-        not_joined.append(FORCE_SUB_1)
-    # Check second channel
-    try:
-        user = await client.get_chat_member(FORCE_SUB_2, user_id)
-        if user.status == enums.ChatMemberStatus.BANNED:
-            banned = True
-    except UserNotParticipant:
-        not_joined.append(FORCE_SUB_2)
-    except PeerIdInvalid:
-        logger.error(f"Invalid channel ID: {FORCE_SUB_2}")
-        not_joined.append(FORCE_SUB_2)
-    # Handle banned case
-    if banned:
-        return await client.send_message(
-            user_id,
-            text="<b>Sᴏʀʀy, Yᴏᴜ'ʀᴇ Bᴀɴɴᴇᴅ Tᴏ Uꜱᴇ Mᴇ</b>",
-            parse_mode=enums.ParseMode.HTML
-        )
-    # Build buttons for not joined channels
-    for channel in not_joined:
-        channel_handle = channel.lstrip("-100")  # Convert ID to handle format
-        buttons.append([
-            InlineKeyboardButton(text="ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/{channel_handle}")
-        ])
-    if not buttons:  # Fallback if something goes wrong
-        buttons = [
-            [InlineKeyboardButton(text="ᴄᴏᴅᴇғʟɪx", url="https://t.me/CodeFlix_Bots")],
-            [InlineKeyboardButton(text="sᴜᴘᴘᴏʀᴛ", url="https://t.me/CodeflixSupport")]
-        ]
-    text = "<blockquote>ʙᴀᴋᴋᴀ!!, ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴛᴏ  ᴀʟʟ ʀᴇǫᴜɪʀᴇᴅ ᴄʜᴀɴɴᴇʟs, ᴊᴏɪɴ ᴛʜᴇ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟs ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ</blockquote>"
-    return await message.reply_text(
-        text=text,
-        reply_markup=InlineKeyboardMarkup(buttons),
-        parse_mode=enums.ParseMode.HTML
-    )
+        silicon = await client.get_chat_member(FORCE_SUB, message.from_user.id)    
+        if silicon.status == enums.ChatMemberStatus.BANNED:                                   
+            return await client.send_message(message.from_user.id, text="<b><blockquote expandable>Sᴏʀʀy Yᴏᴜ'ʀᴇ Bᴀɴɴᴇᴅ Tᴏ Uꜱᴇ Mᴇ<blockquote expandable><b>")  
+    except UserNotParticipant:                       
+        return await message.reply_text(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+    return await message.reply_text(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+          
