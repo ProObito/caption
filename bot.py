@@ -1,9 +1,7 @@
-import os
 from pyrogram import Client
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from datetime import timedelta
-import time
 from info import *
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
 class Bot(Client):
     def __init__(self):
         super().__init__(
@@ -15,21 +13,22 @@ class Bot(Client):
             plugins={"root": "body"},
             sleep_threshold=15,
         )
-        self.start_time = time.time()  # Track bot start time for uptime
 
     async def start(self):
         await super().start()
         me = await self.get_me()
-        self.mention = me.mention
-        self.username = me.username
-         # Print startup message
-        print(f"<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️</b></blockquote>")
-
-        # Calculate uptime
-        uptime_seconds = int(time.time() - self.start_time)
-        uptime_string = str(timedelta(seconds=uptime_seconds))
-
-        # Send startup message to admin and log channel
+        self.force_channel = FORCE_SUB
+        if FORCE_SUB:
+            try:
+                link = await self.export_chat_invite_link(FORCE_SUB)
+                self.invitelink = link
+            except Exception as e:
+                print(e)
+                print("Make Sure Bot admin in force sub channel")
+                self.force_channel = None
+        print(f"{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️")
+        await self.send_message(ADMIN, f"**{me.first_name}  Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️**")
+# Send startup message to admin and log channel
         for chat_id in [ADMIN, LOG_CHANNEL]:
             if chat_id == 0:  # Skip if not set
                 continue
@@ -47,3 +46,4 @@ class Bot(Client):
 
 if __name__ == "__main__":
     Bot().run()
+
