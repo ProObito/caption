@@ -1,5 +1,5 @@
 from pyrogram import Client, filters, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReactionTypeEmoji
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, PeerIdInvalid
 from info import *
 from .f_sub import not_subscribed
