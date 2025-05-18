@@ -33,7 +33,7 @@ async def not_subscribed(_, client, message):
 @Client.on_message(filters.private & filters.create(not_subscribed))
 async def forces_sub(client, message):
     buttons = [
-        [InlineKeyboardButton("• ᴄᴏᴅᴇғʟɪx ʙᴏᴛs •", url=f"https://t.me/CodeFlix_Bots")]
+        [InlineKeyboardButton("• ᴄᴏᴅᴇғʟɪx ʙᴏᴛs •", url=f"https://t.me/{FORCE_SUB_2.lstrip('-100')}")]
     ]
     if FORCE_SUB_2:
         buttons.append([InlineKeyboardButton("• ᴏᴛʜᴇʀ ᴄʜᴀɴɴᴇʟ •", url=f"https://t.me/{FORCE_SUB_2.lstrip('-100')}")])
