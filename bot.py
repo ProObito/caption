@@ -1,8 +1,9 @@
 import os
 from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from datetime import timedelta
 import time
-
+from Info import info
 class Bot(Client):
     def __init__(self):
         super().__init__(
@@ -21,17 +22,22 @@ class Bot(Client):
         me = await self.get_me()
         self.mention = me.mention
         self.username = me.username
-        self.force_channel = Config.FORCE_SUB
+        self.force_channels = {}  # Dictionary to store channel IDs and their invite links
 
-        # Handle force subscription channel
-        if self.force_channel:
-            try:
-                link = await self.export_chat_invite_link(self.force_channel)
-                self.invitelink = link
-            except Exception as e:
-                print(f"Error generating invite link: {e}")
-                print("Make sure the bot is an admin in the force sub channel")
-                self.force_channel = None
+        # Handle force subscription channels
+        for channel_var, channel_name in [
+            ("FORCE_SUB_1", info.FORCE_SUB_1),
+            ("FORCE_SUB_2", info.FORCE_SUB_2)
+        ]:
+            if channel_name:
+                try:
+                    link = await self.export_chat_invite_link(channel_name)
+                    self.force_channels[channel_name] = link
+                    print(f"Invite link for {channel_name}: {link}")
+                except Exception as e:
+                    print(f"Error generating invite link for {channel_name}: {e}")
+                    print(f"Make sure the bot is an admin in {channel_name}")
+                    self.force_channels[channel_name] = None
 
         # Print startup message
         print(f"<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️</b></blockquote>")
@@ -41,7 +47,7 @@ class Bot(Client):
         uptime_string = str(timedelta(seconds=uptime_seconds))
 
         # Send startup message to admin and log channel
-        for chat_id in [Config.ADMIN, Config.LOG_CHANNEL]:
+        for chat_id in [info.ADMIN, info.LOG_CHANNEL]:
             if chat_id == 0:  # Skip if not set
                 continue
             try:
