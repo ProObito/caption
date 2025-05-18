@@ -30,13 +30,13 @@ class Bot(Client):
         uptime_string = str(timedelta(seconds=uptime_seconds))
 
         # Send startup message to admin and log channel
-        for chat_id in [info.ADMIN, info.LOG_CHANNEL]:
+        for chat_id in [ADMIN, LOG_CHANNEL]:
             if chat_id == 0:  # Skip if not set
                 continue
             try:
                 await self.send_photo(
                     chat_id=chat_id,
-                    photo=info.SILICON_PIC,
+                    photo=SILICON_PIC,
                     caption=("<b><blockquote expandable>{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️\nUptime: `{uptime_string}`\nStarted by: {me.mention}<b><blockquote expandable>"),
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("Updates", url="https://t.me/codeflix_bots")]]
