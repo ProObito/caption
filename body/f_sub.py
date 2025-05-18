@@ -74,9 +74,9 @@ async def forces_sub(client: Client, message):
         )
     # Build buttons for not joined channels
     for channel in not_joined:
-        channel_handle = channel.lstrip("-100")  # Convert ID to handle format
+        channel_handle = channel.lstrip("")  # Convert ID to handle format
         buttons.append([
-            InlineKeyboardButton(text="ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/{channel_handle}")
+            InlineKeyboardButton(text="ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/CodeFlix_Bots")
         ])
     if not buttons:  # Fallback if something goes wrong
         buttons = [
