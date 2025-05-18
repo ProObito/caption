@@ -1,60 +1,78 @@
 import os
 
 class script(object):
-    START_TXT = """Hᴇʟʟᴏ {}\n
-ɪ ᴀᴍ ᴀᴜᴛᴏ ᴄᴀᴘᴛɪᴏɴ ʙᴏᴛ ᴡɪᴛʜ ᴄᴜsᴛᴏᴍ ᴄᴀᴘᴛɪᴏɴ. Fᴏʀ ᴍᴏʀᴇ ɪɴғᴏ ᴏɴ ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ, ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ.\n
-<blockquote>‣ ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/CodeflixSupport'>ᴄᴏᴅᴇғʟɪx</a></blockquote>"""
+    START_TXT = """<b>🎉 Yo, {}! Wᴇʟᴄᴏᴍᴇ Tᴏ Tʜᴇ Uʟᴛɪᴍᴀᴛᴇ Aɴɪᴍᴇ Cʀᴇᴡ! 🚀</b>
+I'ᴍ Tᴇssɪᴀ, Yᴏᴜʀ Aᴜᴛᴏ-Cᴀᴘᴛɪᴏɴ Sᴇɴᴘᴀɪ! Cᴜsᴛᴏᴍɪᴢᴇ Cᴀᴘᴛɪᴏɴs, Aᴅᴅ Lɪɴᴋs, Aɴᴅ Sᴘɪᴄᴇ Uᴘ Yᴏᴜʀ Cʜᴀɴɴᴇʟs Wɪᴛʜ Fᴀɴᴄʏ Fᴏɴᴛs! 😎
+<blockquote>🌟 Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ: <a href='https://t.me/CodeflixSupport'>CᴏᴅᴇFʟɪx Cʀᴇᴡ</a></blockquote>
+👇 Cʜᴇᴄᴋ Oᴜᴛ Tʜᴇ Bᴜᴛᴛᴏɴs Fᴏʀ Mᴏʀᴇ!"""
 
-    HELP_TXT = """<b>✨ Available Commands</b>
+    HELP_TXT = """<b>🔥 Aᴡᴇsᴏᴍᴇ Cᴏᴍᴍᴀɴᴅs Fᴏʀ Yᴏᴜ, Sᴇɴᴘᴀɪ! 🚀</b>
 
-• <b>/set_cap</b> <caption> — Set a custom caption for your channel. Use placeholders for file details.
-  Example: <code>/set_cap 🎥 {file_name} ({language}, {year}) - {file_size}</code>
+• <b>/set_cap</b> <caption> — Cʀᴀғᴛ A Cᴜsᴛᴏᴍ Cᴀᴘᴛɪᴏɴ Wɪᴛʜ Pʟᴀᴄᴇʜᴏʟᴅᴇʀs Oʀ Lɪɴᴋs.
+  Ex: <code>/set_cap 🎥 <a href='{link}'>{file_name}</a> ({language}, {year}) - {file_size}</code>
 
-• <b>/set_font</b> <style> — Set the font style for captions. Requires a caption set with /set_cap. Available styles:
-  - <b>BOLD</b>: Makes text bold
-  - <b>ITALIC</b>: Makes text italic
-  - <b>UNDERLINE</b>: Underlines text
-  - <b>STRIKETHROUGH</b>: Strikes through text
-  - <b>MONOSPACE</b>: Uses fixed-width font
-  - <b>SPOILER</b>: Hides text until clicked
-  - <b>BLOCKQUOTE</b>: Adds a quote bar and indents text
-  - <b>NONE</b>: No formatting (default)
-  Example: <code>/set_font BLOCKQUOTE</code> (sets caption as a blockquote)
-  Example: <code>/set_font BOLD</code> (sets caption in bold)
+• <b>/set_font</b> <style> — Sᴛʏʟᴇ Yᴏᴜʀ Cᴀᴘᴛɪᴏɴs (Uᴇs /set_cap Fɪʀsᴛ). Sᴛʏʟᴇs:
+  - <b>BOLD</b> 💪: <b>Bold Text</b>
+  - <b>ITALIC</b> 𝘪𝘵𝘢𝘭𝘪𝘤: <i>Slanted Vibes</i>
+  - <b>UNDERLINE</b> ⬇️: <u>Underlined Swag</u>
+  - <b>STRIKETHROUGH</b> ~strike~: <s>Crossed Out</s>
+  - <b>MONOSPACE</b> 🖥️: <code>Coder Aesthetic</code>
+  - <b>SPOILER</b> 🙈: <spoiler>Hidden Gem</spoiler>
+  - <b>BLOCKQUOTE</b> 📜: <blockquote>Quoted Epicness</blockquote>
+  - <b>SMALLCAPS</b> 🅂🄼🄰🄻🄻: ꜱᴍᴀʟʟ ᴄᴀᴘꜱ ᴄᴏᴏʟ
+  - <b>SANS</b> 🅂🄰🄽🅂: 𝗦𝗔𝗡𝗦 𝗦𝗘𝗥𝗜𝗙 𝗕𝗢𝗟𝗗
+  - <b>NONE</b> 📄: Plain Jane
+  Ex: <code>/set_font BOLD</code> → <b>Epic Caption</b>
 
-• <b>/del_cap</b> — Delete the custom caption and font style, reverting to the default caption.
+• <b>/set_link</b> <text> <url> — Mᴀᴋᴇ Sᴘᴇᴄɪғɪᴄ Tᴇxᴛ Iɴ Cᴀᴘᴛɪᴏɴ Cʟɪᴄᴋᴀʙʟᴇ.
+  Ex: <code>/set_link Watch_Now https://t.me/CodeFlix_Bots</code> → <a href='https://t.me/CodeFlix_Bots'>Watch_Now</a>
 
-• <b>/start</b> — Start the bot and view the main menu.
+• <b>/del_cap</b> — Rᴇsᴇᴛ Cᴀᴘᴛɪᴏɴ Aɴᴅ Fᴏɴᴛ Tᴏ Dᴇғᴀᴜʟᴛ.
 
-<b>📋 Instructions</b>
-1. Add this bot to your channel with full admin rights (including 'Edit Messages').
-2. Use the commands above in your channel.
-3. Avoid forward tags on files for best results.
-4. Set a caption with /set_cap before using /set_font.
+• <b>/stats</b> — Cʜᴇᴄᴋ Tᴏᴛᴀʟ Usᴇʀs Aɴᴅ Cʜᴀɴɴᴇʟs (Aᴅᴍɪɴ Oɴʟʏ).
 
-<b>🔣 Format Placeholders</b>
-• <code>{file_name}</code>: Original file name
-• <code>{file_size}</code>: File size
-• <code>{language}</code>: Language of file
-• <code>{year}</code>: Year of file
-• <code>{default_caption}</code>: Original caption
+• <b>/ping</b> — Tᴇsᴛ Bᴏᴛ’s Sᴘᴇᴇᴅ. Pɪɴɢ! 🏓
 
-<b>🎯 Example Usage</b>
-1. Set caption: <code>/set_cap 🎥 {file_name} ({language}) - {file_size}</code>
-2. Set font: <code>/set_font BOLD</code>
-3. Post a video named "Movie_2023.mp4" (50MB, caption "Hindi 2023").
-   Result: <b>🎥 Movie 2023 (Hindi) - 50.00 MB</b>
+• <b>/id</b> — Gᴇᴛ Cʜᴀᴛ Oʀ Usᴇʀ ID.
+
+• <b>/start</b> — Kɪᴄᴋsᴛᴀʀᴛ Tʜᴇ Bᴏᴛ Wɪᴛʜ A Fᴀɴᴄʏ Mᴇɴᴜ.
+
+<b>Aᴅᴅ Cʟɪᴄᴋᴀʙʟᴇ Lɪɴᴋs</b>
+Uᴇs <code><a href='{link}'>text</a></code> Iɴ /set_cap Oʀ /set_link Fᴏʀ Lɪɴᴋs Wɪᴛʜ Fᴏɴᴛs.
+  Ex: <code>/set_cap <a href='{link}'>{file_name}</a> - {file_size}</code>
+      <code>/set_font SANS</code>
+      Vɪᴅᴇᴏ Wɪᴛʜ Lɪɴᴋ "https://t.me/CodeFlix_Bots" → <b><a href='https://t.me/CodeFlix_Bots'>Movie 2023</a> - 50.00 MB</b>
+
+<b>Hᴏᴡ Tᴏ Rᴏᴄᴋ Iᴛ</b>
+1. Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Cʜᴀɴɴᴇʟ Wɪᴛʜ Fᴜʟʟ Aᴅᴍɪɴ Rɪɢʜᴛs ('Eᴅɪᴛ Mᴇssᴀɢᴇs').
+2. Usᴇ Cᴏᴍᴍᴀɴᴅs Iɴ Cʜᴀɴɴᴇʟ.
+3. Aᴠᴏɪᴅ Fᴏʀᴡᴀʀᴅ Tᴀɢs Oɴ Fɪʟᴇs.
+4. Sᴇᴛ Cᴀᴘᴛɪᴏɴ Wɪᴛʜ /set_cap Bᴇғᴏʀᴇ /set_font.
+
+<b>Pʟᴀᴄᴇʜᴏʟᴅᴇʀs</b>
+• <code>{file_name}</code>: Fɪʟᴇ Nᴀᴍᴇ
+• <code>{file_size}</code>: Fɪʟᴇ Sɪᴢᴇ
+• <code>{language}</code>: Fɪʟᴇ Lᴀɴɢᴜᴀɢᴇ
+• <code>{year}</code>: Fɪʟᴇ Yᴇᴀʀ
+• <code>{default_caption}</code>: Oʀɪɢɪɴᴀʟ Cᴀᴘᴛɪᴏɴ
+• <code>{link}</code>: Cʟɪᴄᴋᴀʙʟᴇ URL
+
+<b>Eᴘɪᴄ Exᴀᴍᴘʟᴇ</b>
+1. <code>/set_cap 🎥 <a href='{link}'>{file_name}</a> ({language}) - {file_size}</code>
+2. <code>/set_font SMALLCAPS</code>
+3. Pᴏsᴛ Vɪᴅᴇᴏ "Movie_2023.mp4" (50MB, "Hindi 2023", Lɪɴᴋ "https://t.me/CodeFlix_Bots").
+   Rᴇsᴜʟᴛ: <b>🎥 <a href='https://t.me/CodeFlix_Bots'>ᴍᴏᴠɪᴇ 2023</a> (ʜɪɴᴅɪ) - 50.00 ᴍʙ</b>
 """
 
-    ABOUT_TXT = """<b>❖ About Me</b>
+    ABOUT_TXT = """<b>Aʙᴏᴜᴛ Yᴏᴜʀ Sᴇɴᴘᴀɪ</b>
 <blockquote>
-❍ ᴍʏ ɴᴀᴍᴇ: <a href="https://t.me/tessia_caption_bot">ᴛᴇssɪᴀ</a>
-❍ ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href="https://t.me/onlyyuji">ᴄᴏᴅᴇғʟɪx</a>
-❍ ᴏᴡɴᴇʀ: <a href="https://t.me/ProYato">ʏᴀᴛᴏ</a>
-❍ ʟᴀɴɢᴜᴀɢᴇ: <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a>
-❍ ᴅᴀᴛᴀʙᴀsᴇ: <a href="https://www.mongodb.com/">ᴍᴏɴɢᴏ ᴅʙ</a>
-❍ ʜᴏsᴛᴇᴅ ᴏɴ: <a href="https://t.me/ProYato">ᴠᴘs</a>
-❍ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeFlix_Bots">ᴄᴏᴅᴇғʟɪx</a>
-❍ ʜᴇʟᴘ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeflixSupport">ᴄᴏᴅᴇғʟɪx</a>
+❍ Nᴀᴍᴇ: <a href="https://t.me/tessia_caption_bot">Tᴇssɪᴀ</a>
+❍ Dᴇᴠᴇʟᴏᴘᴇʀ: <a href="https://t.me/onlyyuji">CᴏᴅᴇFʟɪx</a>
+❍ Oᴡɴᴇʀ: <a href="https://t.me/ProYato">Yᴀᴛᴏ</a>
+❍ Lᴀɴɢᴜᴀɢᴇ: <a href="https://www.python.org/">Pʏᴛʜᴏɴ</a>
+❍ Dᴀᴛᴀʙᴀsᴇ: <a href="https://www.mongodb.com/">MᴏɴɢᴏDB</a>
+❍ Hᴏsᴛᴇᴅ Oɴ: <a href="https://t.me/ProYato">VPS</a>
+❍ Mᴀɪɴ Cʜᴀɴɴᴇʟ: <a href="https://t.me/CodeFlix_Bots">CᴏᴅᴇFʟɪx</a>
+❍ Hᴇʟᴘ Cʜᴀɴɴᴇʟ: <a href="https://t.me/CodeflixSupport">CᴏᴅᴇFʟɪx Sᴜᴘᴘᴏʀᴛ</a>
 </blockquote>
-<b>➻ Click the buttons below for help and more info about me.</b>"""
+<b>➻ Hɪᴛ Tʜᴇ Bᴜᴛᴛᴏɴs Fᴏʀ Mᴏʀᴇ Iɴғᴏ! 🚀</b>"""
