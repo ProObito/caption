@@ -24,6 +24,7 @@ FORCE_SUB_2 = "-1002078429106"  # Second channel ID (update with valid ID)
 MONGO_DB = str(getenv("MONGO_DB", "mongodb+srv://spxsolo:umaid2008@cluster0.7fbux.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"))
 START_GIF = "CAACAgUAAxkBAAEFBAVoH4qTFGwjwrCkLJPeM0HjglJpYgACXAgAArSfGVXK3kCuYAiK2B4E"  # Replace with your GIF/video file_id or URL
 START_REACTION = "🔥"  # Reaction emoji for /start message
+LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1002078429106"))  # Log channel ID
 DEF_CAP = str(
     getenv(
         "DEF_CAP",
