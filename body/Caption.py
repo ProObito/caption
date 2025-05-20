@@ -424,3 +424,25 @@ async def font_callback(bot, query):
     except Exception as e:
         logger.error(f"Error in font callback: {str(e)}")
         await query.answer("Failed to show font info", show_alert=True)
+
+@Client.on_message(filters.command("help"))
+async def help_command(bot, message: Message):
+    try:
+        await message.reply_text(
+            text=script.HELP_TXT,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton('• ᴀʙᴏᴜᴛ •', callback_data='about')
+                    ],
+                    [
+                        InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
+                    ]
+                ]
+            ),
+            parse_mode=enums.ParseMode.HTML,
+            disable_web_page_preview=True
+        )
+    except Exception as e:
+        logger.error(f"Error in /help command: {str(e)}")
+        await message.reply_text("Failed to show help.")
