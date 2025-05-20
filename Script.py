@@ -9,16 +9,16 @@ class script(object):
 • <b>/set_cap</b> <caption> — <i>Set a custom caption for your channel. Use placeholders for file details.<b>
   <b>Example:</b> <code>/set_cap 🎥 {file_name} ({language}, {year}) - {file_size}</code></b>
   <b>ᴜsᴇ /font ᴛᴏ sᴇᴇ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴏɴᴛs ɪɴ ʙᴏᴛ</b>"""
+
     ABOUT_TXT = """<b>About Me</b>
 <blockquote><b>❍ ᴍʏ ɴᴀᴍᴇ: <a href="https://t.me/tessia_caption_bot">ᴛᴇssɪᴀ</a></b>
-<b>❍ ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href="https://t.me/onlyyuji">ᴄᴏᴅᴇғʟɪx</a></b>
 <b>❍ ᴏᴡɴᴇʀ: <a href="https://t.me/ProYato">ʏᴀᴛᴏ</a><b>
 <b>❍ ʟᴀɴɢᴜᴀɢᴇ: <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a></b>
 <b>❍ ᴅᴀᴛᴀʙᴀsᴇ: <a href="https://www.mongodb.com/">ᴍᴏɴɢᴏ ᴅʙ</a></b>
 <b>❍ ʜᴏsᴛᴇᴅ ᴏɴ: <a href="https://t.me/ProYato">ᴠᴘs</a></b>
-<b>❍ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeFlix_Bots">ᴄᴏᴅᴇғʟɪx</a></b>
 <b>❍ ʜᴇʟᴘ ᴄʜᴀɴɴᴇʟ: <a href="https://t.me/CodeflixSupport">ᴄᴏᴅᴇғʟɪx</a></b><blockquote>
 <b>➻ Click the buttons below for help and more info about me.</b>"""
+
 FONT_TXT = """<b><blockquote>• /set_font</b> <style> — Set the font style for captions. Requires a caption set with /set_cap. Available styles:
   - <b>BOLD</b>: Makes text bold
   - <b>ITALIC</b>: Makes text italic
